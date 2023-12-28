@@ -58,6 +58,7 @@ class GmailRetriever(EmailRetriever):
                         break
 
             details = {
+                "id": msg_id,
                 "sender": next(
                     (header["value"] for header in headers if header["name"] == "From"),
                     "",

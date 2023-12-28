@@ -12,7 +12,7 @@ def agent():
         organization=os.getenv("OAI_ORG"),
         api_key=os.getenv("OAI_API_KEY"),
     )
-    return OpenAIAgent(client=client, model="gpt-4-1106-preview")
+    return OpenAIAgent(client=client, model=os.getenv("OAI_MODEL"))
 
 
 @pytest.fixture

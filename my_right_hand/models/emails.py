@@ -1,13 +1,16 @@
 import json
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class EmailMessage(BaseModel):
-    sender: str
-    recipient: str
-    subject: str
-    body: str
-    date: str
+    id: str = Field(
+        ..., description="UUID of the email, usually from the email service"
+    )
+    sender: str = Field(..., description="The sender of the email")
+    recipient: str = Field(..., description="The recipient of the email")
+    subject: str = Field(..., description="The subject of the email")
+    body: str = Field(..., description="The body of the email")
+    date: str = Field(..., description="The date of the email")
 
     @property
     def complete(self) -> str:
@@ -25,11 +28,19 @@ class EmailMessage(BaseModel):
 
 
 class EmailReview(BaseModel):
-    personal: bool
-    address_today: bool
-    address_this_week: bool
-    requires_followup: bool
-    payment_required: bool
+    personal: bool = Field(..., description="Indicates if the email is personal")
+    address_today: bool = Field(
+        ..., description="Indicates if the email needs to be addressed today"
+    )
+    address_this_week: bool = Field(
+        ..., description="Indicates if the email needs to be addressed this week"
+    )
+    requires_followup: bool = Field(
+        ..., description="Indicates if the email requires follow-up"
+    )
+    payment_required: bool = Field(
+        ..., description="Indicates if the email requires payment"
+    )
 
     @classmethod
     def from_json(cls, data: str) -> "EmailReview":
