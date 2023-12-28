@@ -9,13 +9,15 @@ def parse_arguments():
         type=int,
         help="Review emails from the last few days",
         default=1,
+        metavar="",
     )
     parser.add_argument(
         "-m",
         "--model",
         type=str,
-        help="LLM Model To Use",
+        help="Which LLM Model",
         default="gpt-3.5-turbo-1106",
+        metavar="",
     )
     parser.add_argument(
         "-e",
@@ -28,6 +30,7 @@ def parse_arguments():
             "and anything in the email models. "
             "Example: --exclude_fields field1 field2 field3"
         ),
+        metavar="",
     )
     parser.add_argument(
         "--cost_savings",

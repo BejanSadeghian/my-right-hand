@@ -1,7 +1,7 @@
 import json
 
 from typing import Callable
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, computed_field
 
 
 class EmailMessage(BaseModel):
@@ -31,8 +31,13 @@ class EmailMessage(BaseModel):
             f"Sender: {self.sender}, "
             f"Recipient: {self.recipient}, "
             f"Subject: {self.subject}, "
-            f"Body: {self.body[:500]}"
+            f"Body: {self.snippet}"
         )
+
+    @computed_field
+    @property
+    def snippet(self) -> str:
+        return self.body[:250]
 
     @classmethod
     def from_json(cls, data: str) -> "EmailMessage":
@@ -62,7 +67,15 @@ class EmailReview(BaseModel):
     payment_required: bool = Field(
         ..., description="Does the receiver need to pay for something"
     )
-    payment_received: bool = Field(..., description="Has the receiver received payment")
+    payment_received: bool = Field(
+        ...,
+        description="Has the receiver received payment",
+    )
+
+    @computed_field
+    @property
+    def attention_req(self) -> bool:
+        return any([getattr(self, attr) for attr in self.__fields__])
 
     @classmethod
     def from_json(cls, data: str) -> "EmailReview":

@@ -18,8 +18,8 @@ def export_data(
     data_dicts = [
         dict(**d1.model_dump(), **d2.model_dump())
         for d1, d2 in zip(
-            emails,
             reviews,
+            emails,
         )
     ]
     df = pd.DataFrame(data_dicts)
