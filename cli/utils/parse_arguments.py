@@ -11,16 +11,28 @@ def parse_arguments():
         default=1,
     )
     parser.add_argument(
+        "-m",
+        "--model",
+        type=str,
+        help="LLM Model To Use",
+        default="gpt-3.5-turbo-1106",
+    )
+    parser.add_argument(
         "-e",
         "--exclude_fields",
         nargs="+",
-        default=["subject", "body"],
+        default=["body", "recipient"],
         help=(
             "Exclude fields from the output. "
             "Options: subject, body, sender, recipient, date "
             "and anything in the email models. "
             "Example: --exclude_fields field1 field2 field3"
         ),
+    )
+    parser.add_argument(
+        "--cost_savings",
+        action="store_true",
+        help="Cuts down LLM Costs by using a summary of your emails.",
     )
     parser.add_argument(
         "--csv",

@@ -24,6 +24,16 @@ class EmailMessage(BaseModel):
             f"Body: {self.body}"
         )
 
+    @property
+    def summary(self) -> str:
+        return (
+            f"Date: {self.date}, "
+            f"Sender: {self.sender}, "
+            f"Recipient: {self.recipient}, "
+            f"Subject: {self.subject}, "
+            f"Body: {self.body[:500]}"
+        )
+
     @classmethod
     def from_json(cls, data: str) -> "EmailMessage":
         return cls(**json.loads(data))
@@ -39,19 +49,20 @@ class EmailMessage(BaseModel):
 
 
 class EmailReview(BaseModel):
-    personal: bool = Field(..., description="Indicates if the email is personal")
+    personal: bool = Field(..., description="Does the email is personal")
     address_today: bool = Field(
-        ..., description="Indicates if the email needs to be addressed today"
+        ..., description="Does the email needs to be addressed today"
     )
     address_this_week: bool = Field(
-        ..., description="Indicates if the email needs to be addressed this week"
+        ..., description="Does the email needs to be addressed this week"
     )
     requires_followup: bool = Field(
-        ..., description="Indicates if the email requires follow-up"
+        ..., description="Does the email requires follow-up"
     )
     payment_required: bool = Field(
-        ..., description="Indicates if the email requires payment"
+        ..., description="Does the receiver need to pay for something"
     )
+    payment_received: bool = Field(..., description="Has the receiver received payment")
 
     @classmethod
     def from_json(cls, data: str) -> "EmailReview":

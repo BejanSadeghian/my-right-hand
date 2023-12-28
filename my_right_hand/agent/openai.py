@@ -1,5 +1,7 @@
+import json
 from openai import OpenAI
 from icecream import ic
+from pydantic import ValidationError
 
 from my_right_hand.agent import LanguageModule
 from my_right_hand.models import EmailMessage, EmailReview
@@ -23,7 +25,7 @@ class OpenAIAgent(LanguageModule):
         self.temperature = temperature
         self.model = model
 
-    def review(self, email: EmailMessage) -> EmailReview:
+    def review(self, email: EmailMessage, summary=False) -> EmailReview:
         response = self.client.chat.completions.create(
             model=self.model,
             response_format={"type": "json_object"},
@@ -31,8 +33,20 @@ class OpenAIAgent(LanguageModule):
             temperature=self.temperature,
             messages=[
                 {"role": "system", "content": self.instruction},
-                {"role": "user", "content": email.complete},
+                {
+                    "role": "user",
+                    "content": email.summary if summary else email.complete,
+                },
             ],
         )
-        ic(response.choices[0].message.content)
-        return EmailReview.from_json(response.choices[0].message.content)
+        data = response.choices[0].message.content
+        try:
+            ic(data)
+            return EmailReview.from_json(data)
+        except ValidationError as val_err:
+            # The LLM tends to add 'properties;
+            ic(val_err)
+            ic(data)
+            data_dict = json.loads(data)
+            data = json.dumps(data_dict.get("properties"))
+            return EmailReview.from_json(data)
