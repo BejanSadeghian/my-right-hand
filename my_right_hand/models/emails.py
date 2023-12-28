@@ -1,4 +1,6 @@
 import json
+
+from typing import Callable
 from pydantic import BaseModel, Field
 
 
@@ -25,6 +27,15 @@ class EmailMessage(BaseModel):
     @classmethod
     def from_json(cls, data: str) -> "EmailMessage":
         return cls(**json.loads(data))
+
+    def redact_data(
+        self,
+        redactor_fn: Callable[[str], str],
+        attrs_to_redact=["subject", "body"],
+    ):
+        """Redacts data from"""
+        for attr in attrs_to_redact:
+            setattr(self, attr, redactor_fn(getattr(self, attr)))
 
 
 class EmailReview(BaseModel):

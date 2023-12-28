@@ -10,18 +10,20 @@ from presidio_anonymizer import AnonymizerEngine
 
 from my_right_hand.email_client import GmailRetriever
 from my_right_hand.agent import OpenAIAgent
-from cli.utils import parse_arguments, export_csv
+from cli.utils import parse_arguments, export_data, redactor
 
 # Global Setup
 dotenv.load_dotenv()
 args = parse_arguments()
-analyzer = AnalyzerEngine()
-anonymizer = AnonymizerEngine()
-ic.disable()  # Debugging only
+ic.disable()
 
 if __name__ == "__main__":
+    if args.verbose:
+        ic.enable()
+
     # Runtime Setup
     n_days = args.num_days
+    exclusions = args.exclude_fields
     end_date = datetime.now().strftime("%m/%d/%Y")
     start_date = (datetime.now() - timedelta(days=n_days)).strftime("%m/%d/%Y")
 
@@ -49,6 +51,8 @@ if __name__ == "__main__":
         #     analyzer_results=results,
         # )
         # ic(anonymized_text)
+
+        email_data.redact_data(redactor)
         reviewed = agent.review(email_data)
 
         # Store Data
@@ -60,10 +64,11 @@ if __name__ == "__main__":
         out_filename = f"report_{safe_start_date}_{safe_end_date}.csv"
         out_directory = "reports"
         print(f"saving {out_filename} to {out_directory}")
-        export_csv(
+        export_data(
             emails=emails,
             reviews=reviews,
             file_name=out_filename,
             directory=out_directory,
             link_fn=lambda x: f"https://mail.google.com/mail/u/0/#inbox/{x}",
+            exclusions=exclusions,
         )
