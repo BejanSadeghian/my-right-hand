@@ -30,10 +30,10 @@ def parse_arguments():
         "-e",
         "--exclude_fields",
         nargs="+",
-        default=["body", "recipient"],
+        default=["body", "recipient", "snippet"],
         help=(
             "Exclude fields from the output. "
-            "Options: subject, body, sender, recipient, date "
+            "Options: subject, body, sender, recipient, date, snippet"
             "and anything in the email models. "
             "Example: --exclude_fields field1 field2 field3"
         ),

@@ -17,10 +17,10 @@ My Right Hand is a Python-based project that uses OpenAI's language models to re
 The main entry point of the application is `cli/app.py`. You can run it with various command-line arguments to customize its behavior. For example:
 
 ```bash
-python cli/app.py -n 3 --model gpt-3.5-turbo-1106 --exclude_fields body snippet --csv
+python cli/app.py -n 3 -k {your_llm_api_key} -ec {path_to_your_credentials.json} --csv
 ```
 
-This command will review emails from the last 3 days using the `gpt-3.5-turbo-1106` model, exclude the body and recipient fields from the output, and export the results to a CSV file. (any GPT that supports a JSON response will work)
+This command will review emails from the last 3 days using the `gpt-3.5-turbo-1106` model and export the results to a CSV file. Any LLM that supports a JSON response will work.
 
 ## Dependencies
 
@@ -38,10 +38,6 @@ The dependencies are managed with Poetry and are listed in `pyproject.toml`.
 ## Testing
 
 The project includes some tests, which are located in the `tests` directory. The tests use pytest and can be run with the pytest command.
-
-## Note
-
-Please make sure to set up the necessary environment variables for OpenAI and Gmail API in a `.env` file or your environment. The project uses python-dotenv to load environment variables from a `.env` file.
 
 ## Disclaimer
 
