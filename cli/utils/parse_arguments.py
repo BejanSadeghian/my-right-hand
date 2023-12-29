@@ -42,6 +42,15 @@ def parse_arguments():
         action="store_true",
         help="Export data to CSV",
     )
+
+    parser.add_argument(
+        "--clear_storage",
+        action="store_true",
+        help=(
+            "Removes data previously stored data, "
+            "this flag will prompt for confirmation."
+        ),
+    )
     parser.add_argument(
         "--verbose",
         action="store_true",

@@ -1,29 +1,15 @@
 import os
 import pandas as pd
-from typing import Callable
-from my_right_hand.models import EmailMessage, EmailReview
 
 
-def export_data(
-    emails: list[EmailMessage],
-    reviews: list[EmailReview],
+def save_csv(
+    df: pd.DataFrame,
     file_name: str,
     directory: str,
-    link_fn: Callable[[str], str],
     exclusions: list[str] = None,
 ):
     if exclusions is None:
         exclusions = []
-
-    data_dicts = [
-        dict(**d1.model_dump(), **d2.model_dump())
-        for d1, d2 in zip(
-            reviews,
-            emails,
-        )
-    ]
-    df = pd.DataFrame(data_dicts)
-    df["link"] = [link_fn(email.id) for email in emails]
     df.drop(
         exclusions,
         axis=1,
