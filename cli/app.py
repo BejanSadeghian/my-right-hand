@@ -29,6 +29,8 @@ if __name__ == "__main__":
     n_days = args.num_days
     exclusions = args.exclude_fields
     llm_model = args.model
+    llm_key = args.llm_key
+    email_credentials = args.email_credentials
     cost_savings = args.cost_savings
 
     # Runtime Setup
@@ -36,13 +38,12 @@ if __name__ == "__main__":
     start_date = (datetime.now() - timedelta(days=n_days)).strftime("%m/%d/%Y")
 
     client = OpenAI(
-        organization=os.getenv("OAI_ORG"),
-        api_key=os.getenv("OAI_API_KEY"),
+        api_key=llm_key,
     )
     agent = OpenAIAgent(client=client, model=llm_model)
     email = GmailRetriever(
         scopes=["https://www.googleapis.com/auth/gmail.readonly"],
-        credentials_json_path="credentials.json",
+        credentials_json_path=email_credentials,
     )
     storage_manager = Storage()
 
