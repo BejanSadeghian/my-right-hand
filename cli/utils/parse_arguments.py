@@ -7,7 +7,7 @@ def parse_arguments():
         "-k",
         "--llm_key",
         type=str,
-        help="LLM APi Key",
+        help="LLM API Key",
         metavar="",
     )
     parser.add_argument(
@@ -27,15 +27,14 @@ def parse_arguments():
         metavar="",
     )
     parser.add_argument(
-        "-e",
+        "-ex",
         "--exclude_fields",
         nargs="+",
         default=["body", "recipient", "snippet"],
         help=(
             "Exclude fields from the output. "
-            "Options: subject, body, sender, recipient, date, snippet"
-            "and anything in the email models. "
-            "Example: --exclude_fields field1 field2 field3"
+            "Options are anything in within either of the email models. "
+            "Example: --exclude_fields subject body snippet"
         ),
         metavar="",
     )
@@ -50,7 +49,10 @@ def parse_arguments():
     parser.add_argument(
         "--cost_savings",
         action="store_true",
-        help="Cuts down LLM Costs by using a summary of your emails.",
+        help=(
+            "Cuts down LLM Costs by using your email snippet "
+            "instead of the full body"
+        ),
     )
     parser.add_argument(
         "--csv",
@@ -62,8 +64,8 @@ def parse_arguments():
         "--clear_storage",
         action="store_true",
         help=(
-            "Removes data previously stored data, "
-            "this flag will prompt for confirmation."
+            "Removes previously stored data, this flag will "
+            "prompt for confirmation before execution"
         ),
     )
     parser.add_argument(

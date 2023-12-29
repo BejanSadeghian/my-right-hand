@@ -12,15 +12,23 @@ My Right Hand is a Python-based project that uses OpenAI's language models to re
 
 - **Data Export**: The application can export the reviewed emails to a CSV file. It supports excluding certain fields from the output.
 
-## Usage
+### About this Repository
 
-The main entry point of the application is `cli/app.py`. You can run it with various command-line arguments to customize its behavior. For example:
+This repository contains two things, a package titled `my-right-hand` and a simple CLI tool that demonstrates use of this package. The `my-right-hand` package includes AI agent and data connector modules to ease the use of LLMs to review and data. Today this package focuses on Open AI's GPT LLMs and email data from Gmail. 
+
+If you would like to contribute please feel free to open an issue or create a PR!
+
+## Quick Start (CLI)
+
+The entry point of the CLI tool is `cli/app.py`. You can run it with various command-line arguments to customize its behavior. For example:
 
 ```bash
 python cli/app.py -n 3 -k {your_llm_api_key} -ec {path_to_your_credentials.json} --csv
 ```
 
 This command will review emails from the last 3 days using the `gpt-3.5-turbo-1106` model and export the results to a CSV file. Any LLM that supports a JSON response will work.
+
+> For a full description on how to use the CLI tool use the command `python cli/app.py --help`
 
 ## Dependencies
 
