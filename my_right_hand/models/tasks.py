@@ -43,9 +43,9 @@ class Assignment(BaseModel):
 
 if __name__ == "__main__":
     person = Person(
-        first_name="Bejan",
-        last_name="Sadeghian",
-        email="bejan.sadeghian@gmail.com",
+        first_name="John",
+        last_name="Doe",
+        email="email@gmail.com,
         phone="123-456-7890",
         relationships=[
             Relation(
