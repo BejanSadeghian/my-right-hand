@@ -14,11 +14,12 @@ My Right Hand is a Python-based project that uses OpenAI's language models to re
 
 ## About this Repository
 
-This repository contains two things, a package titled `my-right-hand` and a simple CLI tool that demonstrates use of this package. The `my-right-hand` package includes AI agent and data connector modules to ease the use of LLMs to review and data. Today this package focuses on Open AI's GPT LLMs and email data from Gmail. 
+This repository contains two things, a package titled `my-right-hand` and a simple CLI tool that demonstrates use of this package. The `my-right-hand` package includes AI agent and data connector modules to ease the use of LLMs to review and data. Today this package focuses on Open AI's GPT LLMs and email data from Gmail.
+
+> If you would like to contribute please feel free to open an issue or create a PR!
 
 > The dependencies are managed with Poetry and are listed in `pyproject.toml`
 
-If you would like to contribute please feel free to open an issue or create a PR!
 
 ## Quick Start (Using CLI)
 
