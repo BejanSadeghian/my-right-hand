@@ -4,6 +4,13 @@ import argparse
 def parse_arguments():
     parser = argparse.ArgumentParser(description="AI Email Assistant")
     parser.add_argument(
+        "-k",
+        "--llm_key",
+        type=str,
+        help="LLM APi Key",
+        metavar="",
+    )
+    parser.add_argument(
         "-n",
         "--num_days",
         type=int,
@@ -30,6 +37,14 @@ def parse_arguments():
             "and anything in the email models. "
             "Example: --exclude_fields field1 field2 field3"
         ),
+        metavar="",
+    )
+    parser.add_argument(
+        "-ec",
+        "--email_credentials",
+        type=str,
+        help="Path to email API credentials (e.g. gmail: credentials.json)",
+        default="credentials.json",
         metavar="",
     )
     parser.add_argument(
