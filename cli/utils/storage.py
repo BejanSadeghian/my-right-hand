@@ -7,10 +7,10 @@ from datetime import datetime
 class Storage:
     def __init__(
         self,
-        directory: Path = Path("reports"),
+        directory: str,
         filename: str = "persist.pkl",
     ):
-        self.directory = directory
+        self.directory = Path(directory)
         self.filename = filename
         self.file_path = self.directory / self.filename
         self.data = None

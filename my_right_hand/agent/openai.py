@@ -13,6 +13,7 @@ class OpenAIAgent(LanguageModule):
         client: OpenAI,
         temperature: float = 0,
         model: str = "",
+        use_snippet: bool = False,
     ):
         self.client = client
         self.instruction = (
@@ -24,29 +25,30 @@ class OpenAIAgent(LanguageModule):
         )
         self.temperature = temperature
         self.model = model
+        self.use_snippet = use_snippet
 
-    def review(self, email: EmailMessage, summary=False) -> EmailReview:
+    def review(self, email: EmailMessage) -> EmailReview:
         response = self.client.chat.completions.create(
             model=self.model,
             response_format={"type": "json_object"},
-            # response_format={"type": EmailReview.schema_json()},
             temperature=self.temperature,
             messages=[
                 {"role": "system", "content": self.instruction},
                 {
                     "role": "user",
-                    "content": email.summary if summary else email.complete,
+                    "content": email.summary if self.use_snippet else email.complete,
                 },
             ],
         )
         data = response.choices[0].message.content
-        try:
-            ic(data)
-            return EmailReview.from_json(data)
-        except ValidationError as val_err:
-            # The LLM tends to add 'properties;
-            ic(val_err)
-            ic(data)
-            data_dict = json.loads(data)
-            data = json.dumps(data_dict.get("properties"))
-            return EmailReview.from_json(data)
+        return EmailReview.from_json(data)
+        # try:
+        #     ic(data)
+        #     return EmailReview.from_json(data)
+        # except ValidationError as val_err:
+        #     # The LLM tends to add 'properties;
+        #     ic(val_err)
+        #     ic(data)
+        #     data_dict = json.loads(data)
+        #     data = json.dumps(data_dict.get("properties"))
+        #     return EmailReview.from_json(data)

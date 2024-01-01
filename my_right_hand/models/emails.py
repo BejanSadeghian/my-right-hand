@@ -54,22 +54,18 @@ class EmailMessage(BaseModel):
 
 
 class EmailReview(BaseModel):
-    personal: bool = Field(..., description="Does the email is personal")
-    address_today: bool = Field(
-        ..., description="Does the email needs to be addressed today"
+    time_sensitive: bool = Field(
+        ...,
+        description="Is this email time sensitive?",
     )
-    address_this_week: bool = Field(
-        ..., description="Does the email needs to be addressed this week"
+    requires_response: bool = Field(
+        ...,
+        description="Does the email need a response?",
     )
-    requires_followup: bool = Field(
-        ..., description="Does the email requires follow-up"
-    )
-    payment_required: bool = Field(
-        ..., description="Does the receiver need to pay for something"
-    )
+    payment_required: bool = Field(..., description="Do I need to send a payment?")
     payment_received: bool = Field(
         ...,
-        description="Has the receiver received payment",
+        description="Did I receive a payment?",
     )
 
     @computed_field
