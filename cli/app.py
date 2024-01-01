@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 from pydantic import ValidationError
 
 from my_right_hand.email_client import GmailRetriever
-from my_right_hand.agent import OpenAIAgent
+from my_right_hand.agent import OpenAIAgent, LanguageModule
 
 from cli.utils import (
     parse_arguments,
@@ -24,6 +24,23 @@ from cli.utils import (
 dotenv.load_dotenv()
 args = parse_arguments()
 ic.disable()
+
+
+class MyRightHandCLI:
+    def __init__(
+        self,
+        n_days,
+        exclusions,
+        llm_model,
+        llm_key,
+        email_credentials,
+        use_snippet,
+        out_directory,
+        client: OpenAI,
+        agent: LanguageModule,
+    ):
+        pass
+
 
 if __name__ == "__main__":
     if args.verbose:

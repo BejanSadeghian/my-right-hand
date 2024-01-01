@@ -1,7 +1,11 @@
 import json
 
 from typing import Callable
-from pydantic import BaseModel, Field, computed_field
+from pydantic import BaseModel, Field, computed_field, validator
+
+# import pandas as pd
+from dateutil import parser
+from datetime import datetime
 
 
 class EmailMessage(BaseModel):
@@ -12,7 +16,15 @@ class EmailMessage(BaseModel):
     recipient: str = Field(..., description="The recipient of the email")
     subject: str = Field(..., description="The subject of the email")
     body: str = Field(..., description="The body of the email")
-    date: str = Field(..., description="The date of the email")
+    date: datetime = Field(..., description="The date of the email")
+
+    @validator("date", pre=True)
+    def parse_date(cls, value):
+        # return pd.to_datetime(value, format="ISO8601")
+        return parser.parse(value)
+
+    # def date(self) -> datetime:
+    #     return datetime.strptime(self._date, "%Y-%m-%d %H:%M:%S")
 
     @property
     def complete(self) -> str:

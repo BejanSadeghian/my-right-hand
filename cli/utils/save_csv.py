@@ -10,10 +10,9 @@ def save_csv(
 ):
     if exclusions is None:
         exclusions = []
-    df.drop(
+    df = df.drop(
         exclusions,
         axis=1,
-        inplace=True,
         errors="ignore",
     )
 
