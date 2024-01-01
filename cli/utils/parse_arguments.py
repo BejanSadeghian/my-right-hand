@@ -47,7 +47,15 @@ def parse_arguments():
         metavar="",
     )
     parser.add_argument(
-        "--cost_savings",
+        "-d",
+        "--directory",
+        type=str,
+        help="Path to save exported data",
+        default="output",
+        metavar="",
+    )
+    parser.add_argument(
+        "--use_snippet",
         action="store_true",
         help=(
             "Cuts down LLM Costs by using your email snippet "
