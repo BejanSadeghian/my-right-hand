@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 from pydantic import ValidationError
 
 from my_right_hand.email_client import GmailRetriever
-from my_right_hand.agent import OpenAIAgent
+from my_right_hand.agent import OpenAIAgent, LanguageModule
 
 from cli.utils import (
     parse_arguments,
@@ -20,22 +20,22 @@ from cli.utils import (
     Storage,
 )
 
-# Global Setup
-dotenv.load_dotenv()
-args = parse_arguments()
-ic.disable()
 
-if __name__ == "__main__":
-    if args.verbose:
+def main(
+    n_days,
+    exclusions,
+    llm_model,
+    llm_key,
+    email_credentials,
+    use_snippet,
+    out_directory,
+    csv,
+    verbose=False,
+):
+    if verbose:
         ic.enable()
-    n_days = args.num_days
-    exclusions = args.exclude_fields
-    llm_model = args.model
-    llm_key = args.llm_key
-    email_credentials = args.email_credentials
-    use_snippet = args.use_snippet
-    out_directory = args.directory
-
+    else:
+        ic.disable()
     # Runtime Setup
     end_date = datetime.now().strftime("%m/%d/%Y")
     start_date = (datetime.now() - timedelta(days=n_days)).strftime("%m/%d/%Y")
@@ -97,7 +97,7 @@ if __name__ == "__main__":
 
     safe_start_date = start_date.replace("/", "_")
     safe_end_date = end_date.replace("/", "_")
-    if args.csv:
+    if csv:
         out_filename = f"report_{safe_start_date}_{safe_end_date}.csv"
         print(f"saving {out_filename} to {out_directory}")
         df = storage_manager.search(email_list)
@@ -120,3 +120,21 @@ if __name__ == "__main__":
             directory=out_directory,
             exclusions=exclusions,
         )
+
+
+if __name__ == "__main__":
+    # Global Setup
+    dotenv.load_dotenv()
+    args = parse_arguments()
+
+    main(
+        args.num_days,
+        args.exclude_fields,
+        args.model,
+        args.llm_key,
+        args.email_credentials,
+        args.use_snippet,
+        args.directory,
+        args.csv,
+        args.verbose,
+    )
