@@ -12,7 +12,7 @@ from pydantic import ValidationError
 from my_right_hand.email_client import GmailRetriever
 from my_right_hand.agent import OpenAIAgent, LanguageModule
 
-from cli.utils import (
+from my_right_hand.scripts.utils import (
     parse_arguments,
     save_csv,
     generate_dataframe,
