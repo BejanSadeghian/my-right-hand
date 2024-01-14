@@ -11,12 +11,13 @@ from pydantic import ValidationError
 
 from my_right_hand.email_client import GmailRetriever
 from my_right_hand.agent import OpenAIAgent, LanguageModule
+from my_right_hand.utils import redactor
 
 from my_right_hand.scripts.utils import (
     parse_arguments,
-    save_csv,
+    csvClient,
+    sqlClient,
     generate_dataframe,
-    redactor,
     Storage,
 )
 
@@ -39,6 +40,10 @@ def main(
     # Runtime Setup
     end_date = datetime.now().strftime("%m/%d/%Y")
     start_date = (datetime.now() - timedelta(days=n_days)).strftime("%m/%d/%Y")
+    safe_start_date = start_date.replace("/", "_")
+    safe_end_date = end_date.replace("/", "_")
+    out_filename = f"report_{safe_start_date}_{safe_end_date}.csv"
+    failed_filename = f"report_{safe_start_date}_{safe_end_date}_issues.csv"
 
     client = OpenAI(
         api_key=llm_key,
@@ -55,6 +60,21 @@ def main(
         storage_manager.delete()
     storage_manager.create_storage()
     storage_manager.load()
+
+    # Create Data Saver Client
+    resultExporter = csvClient(
+        file_name=out_filename,
+        directory=out_directory,
+        exclusions=exclusions,
+    )
+    errorExporter = csvClient(
+        file_name=failed_filename,
+        directory=out_directory,
+        exclusions=exclusions,
+    )
+
+    # dataSaver = sqlClient(file_name=out_filename,
+    #         directory=out_directory,)
 
     # Retrieve Email
     email = GmailRetriever(
@@ -95,31 +115,16 @@ def main(
         )
         storage_manager.add(df)
 
-    safe_start_date = start_date.replace("/", "_")
-    safe_end_date = end_date.replace("/", "_")
     if csv:
-        out_filename = f"report_{safe_start_date}_{safe_end_date}.csv"
         print(f"saving {out_filename} to {out_directory}")
         df = storage_manager.search(email_list)
-        # Successes
-        save_csv(
-            df=df,
-            file_name=out_filename,
-            directory=out_directory,
-            exclusions=exclusions,
-        )
+        resultExporter.save_data(df=df)
     # Failures
     failures = [email for email, passed in zip(emails, pass_fail) if not passed]
     if len(failures) != 0:
-        failed_filename = f"report_{safe_start_date}_{safe_end_date}_issues.csv"
         print(f"Saving {len(failures)} Issue Emails to {failed_filename}")
         df = pd.DataFrame([dict(x.model_dump()) for x in failures])
-        save_csv(
-            df=df,
-            file_name=failed_filename,
-            directory=out_directory,
-            exclusions=exclusions,
-        )
+        errorExporter.save_data(df=df)
 
 
 if __name__ == "__main__":
