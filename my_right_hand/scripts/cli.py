@@ -11,13 +11,12 @@ from pydantic import ValidationError
 
 from my_right_hand.email_client import GmailRetriever
 from my_right_hand.agent import OpenAIAgent, LanguageModule
-from my_right_hand.utils import redactor
+from my_right_hand.utils import redactor, generate_dataframe
 
 from my_right_hand.scripts.utils import (
     parse_arguments,
     csvClient,
     sqlClient,
-    generate_dataframe,
     Storage,
 )
 
